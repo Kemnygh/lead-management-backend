@@ -60,6 +60,10 @@ const userSchema = new mongoose.Schema(
     },
     contact_number: String,
     profile_picture: String,
+    lastLogin: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,
@@ -76,8 +80,14 @@ userSchema.methods = {
   },
 };
 
-userSchema.virtual("fullName").get(function () {
-  return `${this.firstName} ${this.lastName}`;
+userSchema.virtual("fullname").get(function () {
+  return `${this.firstname} ${this.lastname}`;
+});
+
+userSchema.virtual("currentLogin").get(function () {
+  const today = Date.now();
+  const dateTime = new Date(today);
+  return dateTime.toLocaleString("en-US", { timeZone: "Africa/Nairobi" });
 });
 
 module.exports = mongoose.model("User", userSchema);

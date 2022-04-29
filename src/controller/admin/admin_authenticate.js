@@ -1,11 +1,13 @@
-const User = require("../models/user");
+const User = require("../../models/user");
 const jwt = require("jsonwebtoken");
+const user = require("../../models/user");
 
 exports.register = (req, res) => {
   User.findOne({ email: req.body.email }).exec((err, user) => {
     if (user)
       return res.status(400).json({
-        message: "User already exists",
+        message:
+          "User already exists to create user as admin go to update user",
       });
 
     const {
@@ -17,6 +19,7 @@ exports.register = (req, res) => {
       division,
       department,
       role,
+      access,
     } = req.body;
 
     const _user = new User({
@@ -28,16 +31,17 @@ exports.register = (req, res) => {
       division,
       department,
       role,
+      access,
     });
 
     _user.save((err, data) => {
       if (err) {
         return res.status(400).json({
-          message: "Something went wrong",
+          message: "Something went wrong, confirm the staff number is unique",
         });
       } else {
         return res.status(201).json({
-          user: "User created Successfully",
+          user: "Admin created Successfully",
         });
       }
     });
@@ -97,6 +101,46 @@ exports.login = (req, res) => {
         message: "Something went wrong",
       });
     }
+  });
+};
+
+exports.updateUserToAdmin = (req, res) => {
+  user.findOne({ email: req.body.email, access: "user" }).exec((err, user) => {
+    if (user) {
+      User.updateOne(
+        { email: req.body.email },
+        { $set: { access: "admin" } },
+        (err, res) => {
+          if (err) throw err;
+        }
+      );
+      return res.status(201).json({
+        message: "User updated to Admin",
+      });
+    }
+    return res.status(400).json({
+      message: "user already an admin",
+    });
+  });
+};
+
+exports.updateAdminToUser = (req, res) => {
+  user.findOne({ email: req.body.email, access: "admin" }).exec((err, user) => {
+    if (user) {
+      User.updateOne(
+        { email: req.body.email },
+        { $set: { access: "user" } },
+        (err, res) => {
+          if (err) throw err;
+        }
+      );
+      return res.status(201).json({
+        message: "Admin updated to user",
+      });
+    }
+    return res.status(400).json({
+      message: "user already a normal user",
+    });
   });
 };
 
