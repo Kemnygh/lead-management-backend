@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
       unique: true,
-      lowercase: true,
+      uppercase: true,
     },
     division: {
       type: String,
