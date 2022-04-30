@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const leadSchema = new mongoose.Schema(
   {
-    saleId: {
+    leadId: {
       type: String,
       required: true,
       trim: true,
@@ -29,7 +29,7 @@ const leadSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      uppercase: true,
+      lowercase: true,
     },
     contact_number: {
       type: String,
@@ -62,7 +62,6 @@ const leadSchema = new mongoose.Schema(
     },
     notes: {
       type: String,
-      required: true,
       default: null,
     },
     created_by: {

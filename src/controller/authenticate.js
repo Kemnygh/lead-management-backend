@@ -102,7 +102,7 @@ exports.login = (req, res) => {
 
 exports.requireLogin = (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
-  console.log(token);
+  // console.log(token);
   const user = jwt.verify(token, process.env.JWTSECRET);
   req.user = user;
   next();
