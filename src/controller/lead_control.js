@@ -3,10 +3,10 @@ const User = require("../models/user");
 const crypto = require("crypto");
 
 exports.lead = (req, res) => {
-  console.log(req.user);
   User.findOne({ _id: req.user._id }).exec((err, user) => {
     if (user) {
       const {
+        leadId,
         business_name,
         industry,
         contact_person,
@@ -52,3 +52,114 @@ exports.lead = (req, res) => {
     }
   });
 };
+
+exports.updateLead = (req, res) => {
+  User.findOne({ _id: req.user._id }).exec((err, user) => {
+    if (user && user.access == "admin") {
+      Lead.findOne({ leadId: req.body.leadId }).exec((err, lead) => {
+        let creator_name = lead.created_by.split(" ");
+        let capitalize_creator_name = `${creator_name[0][0]}${creator_name[0]
+          .slice(1, creator_name[0].lenght)
+          .toLowerCase()} ${creator_name[1][0]}${creator_name[1]
+          .slice(1, creator_name[1].lenght)
+          .toLowerCase()}`;
+        let lead_creation_time = lead.createdAt.toLocaleString("en-US", {
+          timeZone: "Africa/Nairobi",
+        });
+        let timeNow = new Date(Date.now());
+        let commentTime = timeNow.toLocaleString("en-US", {
+          timeZone: "Africa/Nairobi",
+        });
+
+        // console.log(
+        //   commentTime.toLocaleString("en-US", {
+        //     timeZone: "Africa/Nairobi",
+        //   })
+        // );
+        Lead.updateOne(
+          { leadId: req.body.leadId, status: "OPEN" },
+          {
+            $set: {
+              status: "assigned",
+              notes:
+                `${capitalize_creator_name}, ${lead_creation_time}:\n${lead.notes}` +
+                "\n.........................................\n" +
+                `${user.firstname} ${user.lastname}, ${commentTime}:\n${req.body.notes}`,
+              assigned_by: `${user.firstname} ${user.lastname}`,
+              assignor_email: user.email,
+              assignor_ekno: user.ekno,
+              assignor_department: user.department,
+              assignor_position: user.role,
+              sales_person: req.body.sales_person,
+              sales_person_email: req.body.sales_person_email,
+              sales_person_ekno: req.body.sales_person_ekno,
+              sales_person_department: req.body.sales_person_department,
+              sales_person_position: req.body.sales_person_position,
+            },
+          },
+          (err, res) => {
+            if (err) throw err;
+            if (res.matchedCount == 0) {
+              //fix how to return message back to html from this point.
+            }
+          }
+        );
+      });
+
+      return res.status(200).json({
+        message: "Lead updated successfully",
+      });
+    }
+
+    return res.status(400).json({
+      message: "you need to be an admin to update lead",
+    });
+  });
+};
+
+exports.closeLead = (req, res) => {
+  User.findOne({ _id: req.user._id }).exec((err, user) => {
+    if (user && user.access == "user") {
+      Lead.findOne({ leadId: req.body.leadId }).exec((err, lead) => {
+        let timeNow = new Date(Date.now());
+        let commentTime = timeNow.toLocaleString("en-US", {
+          timeZone: "Africa/Nairobi",
+        });
+
+        Lead.updateOne(
+          {
+            leadId: req.body.leadId,
+            status: "ASSIGNED",
+            sales_person_email: user.email,
+          },
+          {
+            $set: {
+              status: "closed",
+              notes:
+                `${lead.notes}` +
+                "\n.........................................\n" +
+                `${user.firstname} ${user.lastname}, ${commentTime}:\n${req.body.notes}`,
+            },
+          },
+          (err, res) => {
+            if (err) throw err;
+            if (res.matchedCount == 0) {
+              console.log("record not found");
+              //fix how to return message back to html from this point.
+            }
+          }
+        );
+      });
+
+      return res.status(200).json({
+        message: "Lead updated successfully",
+      });
+    }
+
+    return res.status(400).json({
+      message: "confirm you are owner of the lead",
+    });
+  });
+};
+
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjZlZDU4MjFkYjI5ZTc3YzA4NDFhOGIiLCJpYXQiOjE2NTE0MzA4MjAsImV4cCI6MTY1MTQzMjYyMH0.TeLmvqY2YE5y3S4aFPmg0At2pJ-e_3-niVZu4zHIHno

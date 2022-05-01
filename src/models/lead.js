@@ -5,6 +5,7 @@ const leadSchema = new mongoose.Schema(
     leadId: {
       type: String,
       required: true,
+      unique: true,
       trim: true,
     },
     business_name: {
@@ -62,7 +63,7 @@ const leadSchema = new mongoose.Schema(
     },
     notes: {
       type: String,
-      default: null,
+      required: true,
     },
     created_by: {
       type: String,
@@ -92,42 +93,52 @@ const leadSchema = new mongoose.Schema(
     assigned_by: {
       type: String,
       uppercase: true,
+      default: null,
     },
     assignor_email: {
       type: String,
       lowercase: true,
+      default: null,
     },
     assignor_ekno: {
       type: String,
       uppercase: true,
+      default: null,
     },
     assignor_department: {
       type: String,
       uppercase: true,
+      default: null,
     },
     assignor_position: {
       type: String,
       uppercase: true,
+      default: null,
     },
     sales_person: {
       type: String,
       uppercase: true,
+      default: null,
     },
     sales_person_email: {
       type: String,
       lowercase: true,
+      default: null,
     },
     sales_person_ekno: {
       type: String,
       uppercase: true,
+      default: null,
     },
     sales_person_department: {
       type: String,
       uppercase: true,
+      default: null,
     },
     sales_person_position: {
       type: String,
       uppercase: true,
+      default: null,
     },
   },
   {

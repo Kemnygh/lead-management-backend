@@ -54,7 +54,7 @@ exports.login = (req, res) => {
     if (user) {
       if (user.authenticate(req.body.password)) {
         const token = jwt.sign({ _id: user._id }, process.env.JWTSECRET, {
-          expiresIn: "1h",
+          expiresIn: "30m",
         });
         const {
           _id,

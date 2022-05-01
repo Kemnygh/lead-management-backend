@@ -6,10 +6,10 @@ router.post("/login", login);
 
 router.post("/register", register);
 
-router.post("/profile", requireLogin, (req, res) => {
-  res.status(200).json({
-    user: "profile",
-  });
-});
+// router.post("/profile", requireLogin, (req, res) => {
+//   res.status(200).json({
+//     user: "profile",
+//   });
+// });
 
 module.exports = router;
