@@ -99,6 +99,7 @@ exports.updateLead = (req, res) => {
           },
           (err, res) => {
             if (err) throw err;
+            return res;
             if (res.matchedCount == 0) {
               //fix how to return message back to html from this point.
             }
@@ -117,7 +118,7 @@ exports.updateLead = (req, res) => {
   });
 };
 
-exports.closeLead = (req, res) => {
+exports.closeLead = (req, res, next) => {
   User.findOne({ _id: req.user._id }).exec((err, user) => {
     if (user && user.access == "user") {
       Lead.findOne({ leadId: req.body.leadId }).exec((err, lead) => {
@@ -150,7 +151,6 @@ exports.closeLead = (req, res) => {
           }
         );
       });
-
       return res.status(200).json({
         message: "Lead updated successfully",
       });
@@ -160,6 +160,25 @@ exports.closeLead = (req, res) => {
       message: "confirm you are owner of the lead",
     });
   });
+  next();
 };
 
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjZlZDU4MjFkYjI5ZTc3YzA4NDFhOGIiLCJpYXQiOjE2NTE0MzA4MjAsImV4cCI6MTY1MTQzMjYyMH0.TeLmvqY2YE5y3S4aFPmg0At2pJ-e_3-niVZu4zHIHno
+exports.getLeads = (req, res) => {
+  Lead.find({}).exec((error, leads) => {
+    if (error) return res.status(400).json({ error });
+    if (leads) {
+      return res.status(200).json(leads);
+    }
+  });
+};
+
+exports.leadStatus = (req, res, next) => {
+  Lead.findOne({ leadId: req.body.leadId }).exec((error, lead) => {
+    if (error) return res.status(400).json({ error });
+    if (lead) {
+      console.log(lead);
+      return res.status(200).json(lead);
+    }
+  });
+  next();
+};
