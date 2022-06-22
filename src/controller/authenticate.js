@@ -63,9 +63,11 @@ exports.login = (req, res) => {
           email,
           fullname,
           role,
+          access,
           lastLogin,
           currentLogin,
         } = user;
+        res.cookie("token", token, { expiresIn: "30m" });
         res.status(200).json({
           token,
           user: {
@@ -75,6 +77,7 @@ exports.login = (req, res) => {
             email,
             fullname,
             role,
+            access,
             lastLogin,
             currentLogin,
           },
@@ -84,7 +87,6 @@ exports.login = (req, res) => {
           { $set: { lastLogin: currentLogin } },
           (err, res) => {
             if (err) throw err;
-            console.log("1 document updated");
           }
         );
       } else {
@@ -97,5 +99,12 @@ exports.login = (req, res) => {
         message: "Something went wrong",
       });
     }
+  });
+};
+
+exports.signout = (req, res) => {
+  res.clearCookie("token");
+  res.status(200).json({
+    message: "Signout Successfully",
   });
 };

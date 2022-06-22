@@ -1,7 +1,7 @@
 const express = require("express");
 const env = require("dotenv");
 const mongoose = require("mongoose");
-
+const cors = require("cors");
 const app = express();
 
 //routes
@@ -26,6 +26,7 @@ mongoose
     console.log("Database Connected");
   });
 
+app.use(cors());
 app.use(express.json());
 app.use("/api", userRoutes);
 app.use("/api/admin", adminRoutes);

@@ -67,6 +67,7 @@ exports.login = (req, res) => {
           email,
           fullname,
           role,
+          access,
           lastLogin,
           currentLogin,
         } = user;
@@ -79,6 +80,7 @@ exports.login = (req, res) => {
             email,
             fullname,
             role,
+            access,
             lastLogin,
             currentLogin,
           },
