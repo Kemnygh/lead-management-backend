@@ -3,7 +3,8 @@ const User = require("../models/user");
 const crypto = require("crypto");
 
 exports.lead = (req, res) => {
-  User.findOne({ _id: req.user._id }).exec((err, user) => {
+  // console.log(req.body);
+  User.findOne({ _id: req.body._id }).exec((err, user) => {
     if (user) {
       const {
         leadId,
@@ -181,4 +182,13 @@ exports.leadStatus = (req, res, next) => {
     }
   });
   next();
+};
+
+exports.getOneLead = (req, res) => {
+  Lead.findOne({ leadId: req.body.leadId }).exec((error, leads) => {
+    if (error) return res.status(400).json({ error });
+    if (leads) {
+      return res.status(200).json(leads);
+    }
+  });
 };
