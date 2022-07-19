@@ -53,9 +53,18 @@ const userSchema = new mongoose.Schema(
       trim: true,
       lowercase: true,
     },
+    region: {
+      type: String,
+      required: true,
+      trim: true,
+      uppercase: true,
+    },
     access: {
       type: String,
-      enum: ["user", "admin"],
+      required: true,
+      trim: true,
+      lowercase: true,
+      enum: ["user", "admin", "sales"],
       default: "user",
     },
     contact_number: String,
@@ -81,7 +90,8 @@ userSchema.methods = {
 };
 
 userSchema.virtual("fullname").get(function () {
-  return `${this.firstname} ${this.lastname}`;
+  const name = `${this.firstname} ${this.lastname}`;
+  return name.toUpperCase();
 });
 
 userSchema.virtual("currentLogin").get(function () {

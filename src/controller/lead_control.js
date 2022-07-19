@@ -84,8 +84,8 @@ exports.updateLead = (req, res) => {
               status: "assigned",
               notes:
                 `${capitalize_creator_name}, ${lead_creation_time}:\n${lead.notes}` +
-                "\n.........................................\n" +
-                `${user.firstname} ${user.lastname}, ${commentTime}:\n${req.body.notes}`,
+                "\n...............................................................\n" +
+                `\n\n${user.firstname} ${user.lastname}, ${commentTime}:\n${req.body.notes}`,
               assigned_by: `${user.firstname} ${user.lastname}`,
               assignor_email: user.email,
               assignor_ekno: user.ekno,
@@ -120,7 +120,8 @@ exports.updateLead = (req, res) => {
 };
 
 exports.closeLead = (req, res, next) => {
-  User.findOne({ _id: req.user._id }).exec((err, user) => {
+  // console.log(req.body);
+  User.findOne({ _id: req.body._id }).exec((err, user) => {
     if (user && user.access == "user") {
       Lead.findOne({ leadId: req.body.leadId }).exec((err, lead) => {
         let timeNow = new Date(Date.now());
@@ -139,8 +140,8 @@ exports.closeLead = (req, res, next) => {
               status: "closed",
               notes:
                 `${lead.notes}` +
-                "\n.........................................\n" +
-                `${user.firstname} ${user.lastname}, ${commentTime}:\n${req.body.notes}`,
+                "\n..................................................................\n" +
+                `\n\n${user.firstname} ${user.lastname}, ${commentTime}:\n${req.body.notes}`,
             },
           },
           (err, res) => {
@@ -152,14 +153,14 @@ exports.closeLead = (req, res, next) => {
           }
         );
       });
-      return res.status(200).json({
-        message: "Lead updated successfully",
-      });
+      // return res.status(200).json({
+      //   message: "Lead updated successfully",
+      // });
     }
 
-    return res.status(400).json({
-      message: "confirm you are owner of the lead",
-    });
+    // return res.status(400).json({
+    //   message: "confirm you are owner of the lead",
+    // });
   });
   next();
 };
@@ -185,7 +186,8 @@ exports.leadStatus = (req, res, next) => {
 };
 
 exports.getOneLead = (req, res) => {
-  Lead.findOne({ leadId: req.body.leadId }).exec((error, leads) => {
+  // console.log(req.query);
+  Lead.findOne({ leadId: req.query.leadId }).exec((error, leads) => {
     if (error) return res.status(400).json({ error });
     if (leads) {
       return res.status(200).json(leads);

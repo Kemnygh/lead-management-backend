@@ -17,6 +17,8 @@ exports.register = (req, res) => {
       division,
       department,
       role,
+      region,
+      access,
     } = req.body;
 
     const _user = new User({
@@ -28,6 +30,8 @@ exports.register = (req, res) => {
       division,
       department,
       role,
+      region,
+      access,
     });
 
     _user.save((err, data) => {
@@ -65,6 +69,7 @@ exports.login = (req, res) => {
           ekno,
           department,
           role,
+          region,
           access,
           lastLogin,
           currentLogin,
@@ -81,6 +86,7 @@ exports.login = (req, res) => {
             ekno,
             department,
             role,
+            region,
             access,
             lastLogin,
             currentLogin,
