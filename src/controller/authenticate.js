@@ -49,35 +49,20 @@ exports.register = (req, res) => {
 };
 
 exports.login = (req, res) => {
-  User.findOne({ email: req.body.email }).exec((err, user) => {
-    if (err || !user) {
-      return res.status(400).json({
-        message: "User not found",
-      });
-    }
-    if (user) {
-      if (user.authenticate(req.body.password)) {
-        const token = jwt.sign({ _id: user._id }, process.env.JWTSECRET, {
-          expiresIn: "30m",
+  console.log(res.body);
+  User.findOne({ email: req.body.email, status: "active" }).exec(
+    (err, user) => {
+      if (err || !user) {
+        return res.status(400).json({
+          message: "User not found",
         });
-        const {
-          _id,
-          firstname,
-          lastname,
-          email,
-          fullname,
-          ekno,
-          department,
-          role,
-          region,
-          access,
-          lastLogin,
-          currentLogin,
-        } = user;
-        res.cookie("token", token, { expiresIn: "30m" });
-        res.status(200).json({
-          token,
-          user: {
+      }
+      if (user) {
+        if (user.authenticate(req.body.password)) {
+          const token = jwt.sign({ _id: user._id }, process.env.JWTSECRET, {
+            expiresIn: "30m",
+          });
+          const {
             _id,
             firstname,
             lastname,
@@ -90,26 +75,44 @@ exports.login = (req, res) => {
             access,
             lastLogin,
             currentLogin,
-          },
-        });
-        User.updateOne(
-          { email: req.body.email },
-          { $set: { lastLogin: currentLogin } },
-          (err, res) => {
-            if (err) throw err;
-          }
-        );
+          } = user;
+          res.cookie("token", token, { expiresIn: "30m" });
+          res.status(200).json({
+            token,
+            user: {
+              _id,
+              firstname,
+              lastname,
+              email,
+              fullname,
+              ekno,
+              department,
+              role,
+              region,
+              access,
+              lastLogin,
+              currentLogin,
+            },
+          });
+          User.updateOne(
+            { email: req.body.email },
+            { $set: { lastLogin: currentLogin } },
+            (err, res) => {
+              if (err) throw err;
+            }
+          );
+        } else {
+          return res.status(400).json({
+            message: "Invalid user or password",
+          });
+        }
       } else {
-        return res.status(400).json({
-          message: "Invalid user or password",
+        res.status(200).json({
+          message: "Something went wrong",
         });
       }
-    } else {
-      res.status(200).json({
-        message: "Something went wrong",
-      });
     }
-  });
+  );
 };
 
 exports.signout = (req, res) => {

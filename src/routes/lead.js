@@ -7,6 +7,7 @@ const {
   getLeads,
   getOneLead,
   leadStatus,
+  getUsersRegion,
 } = require("../controller/lead_control");
 const { requireLogin, leadMiddleware } = require("../middleware");
 
@@ -19,5 +20,7 @@ router.post("/profile/update-lead/close", requireLogin, closeLead);
 router.get("/profile/leads", getLeads);
 
 router.get("/profile/single-lead", getOneLead);
+
+router.get("/profile/leads/users", getUsersRegion);
 
 module.exports = router;

@@ -67,6 +67,14 @@ const userSchema = new mongoose.Schema(
       enum: ["user", "admin", "sales"],
       default: "user",
     },
+    status: {
+      type: String,
+      required: true,
+      trim: true,
+      lowercase: true,
+      enum: ["active", "inactive"],
+      default: "active",
+    },
     contact_number: String,
     profile_picture: String,
     lastLogin: {

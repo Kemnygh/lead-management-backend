@@ -55,7 +55,7 @@ exports.lead = (req, res) => {
 };
 
 exports.updateLead = (req, res) => {
-  User.findOne({ _id: req.user._id }).exec((err, user) => {
+  User.findOne({ _id: req.body._id }).exec((err, user) => {
     if (user && user.access == "admin") {
       Lead.findOne({ leadId: req.body.leadId }).exec((err, lead) => {
         let creator_name = lead.created_by.split(" ");
@@ -81,7 +81,7 @@ exports.updateLead = (req, res) => {
           { leadId: req.body.leadId, status: "OPEN" },
           {
             $set: {
-              status: "assigned",
+              status: req.body.assign,
               notes:
                 `${capitalize_creator_name}, ${lead_creation_time}:\n${lead.notes}` +
                 "\n...............................................................\n" +
@@ -191,6 +191,28 @@ exports.getOneLead = (req, res) => {
     if (error) return res.status(400).json({ error });
     if (leads) {
       return res.status(200).json(leads);
+    }
+  });
+};
+
+exports.getUsersRegion = (req, res) => {
+  // console.log(req.query);
+  User.find(
+    { region: req.query.region, access: req.query.access, status: "active" },
+    {
+      email: 1,
+      firstname: 1,
+      lastname: 1,
+      ekno: 1,
+      department: 1,
+      role: 1,
+      region: 1,
+    }
+  ).exec((error, users) => {
+    if (error) return res.status(400).json({ error });
+    if (users) {
+      // console.log(users);
+      return res.status(200).json(users);
     }
   });
 };
