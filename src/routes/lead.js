@@ -8,6 +8,8 @@ const {
   getOneLead,
   leadStatus,
   getUsersRegion,
+  getProductTotals,
+  getSearchedLeads,
 } = require("../controller/lead_control");
 const { requireLogin, leadMiddleware } = require("../middleware");
 
@@ -22,5 +24,9 @@ router.get("/profile/leads", getLeads);
 router.get("/profile/single-lead", getOneLead);
 
 router.get("/profile/leads/users", getUsersRegion);
+
+router.get("/profile/leads/product-totals", getProductTotals);
+
+router.get("/profile/leads/search/", getSearchedLeads);
 
 module.exports = router;

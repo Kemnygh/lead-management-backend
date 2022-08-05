@@ -19,6 +19,7 @@ exports.register = (req, res) => {
       division,
       department,
       role,
+      region,
       access,
     } = req.body;
 
@@ -31,13 +32,14 @@ exports.register = (req, res) => {
       division,
       department,
       role,
+      region,
       access,
     });
 
     _user.save((err, data) => {
       if (err) {
         return res.status(400).json({
-          message: "Something went wrong, confirm the staff number is unique",
+          message: err,
         });
       } else {
         return res.status(201).json({

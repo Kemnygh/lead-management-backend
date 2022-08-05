@@ -16,6 +16,8 @@ exports.registerValidator = [
   check("division").notEmpty().withMessage("division required"),
   check("department").notEmpty().withMessage("department required"),
   check("role").notEmpty().withMessage("role required"),
+  check("access").notEmpty().withMessage("access type required"),
+  check("region").notEmpty().withMessage("region required"),
 ];
 
 exports.registerAdminValidator = [
@@ -30,6 +32,7 @@ exports.registerAdminValidator = [
   check("department").notEmpty().withMessage("department required"),
   check("role").notEmpty().withMessage("role required"),
   check("access").notEmpty().withMessage("access type required"),
+  check("region").notEmpty().withMessage("region required"),
 ];
 
 exports.isRequestValidated = (req, res, next) => {

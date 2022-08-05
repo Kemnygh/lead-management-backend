@@ -216,3 +216,75 @@ exports.getUsersRegion = (req, res) => {
     }
   });
 };
+
+exports.getProductTotals = (req, res) => {
+  Lead.find({}).exec((error, leads) => {
+    if (error) return res.status(400).json({ error });
+    if (leads) {
+      // return res.status(200).json(leads);
+      function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+      }
+
+      const labelList = [];
+      for (let lead of leads) {
+        labelList.push(lead.service_type);
+      }
+      const serviceNames = labelList.filter(onlyUnique);
+
+      const serviceData = [];
+      for (let product of serviceNames) {
+        serviceData.push(labelList.filter((i) => i === product).length);
+      }
+      const finalList = [];
+      const keyPair = {};
+      serviceNames.forEach((key, value) => (keyPair[key] = serviceData[value]));
+
+      for (const [key, value] of Object.entries(keyPair)) {
+        let dataPair = {};
+        dataPair.label = key;
+        dataPair.value = value;
+        finalList.push(dataPair);
+      }
+      // console.log(finalList);
+      return res.status(200).json(finalList);
+    }
+  });
+};
+
+exports.getSearchedLeads = (req, res) => {
+  const region = req.query.region;
+  const fromDate = req.query.fromDate;
+  const status = req.query.status;
+  const service = req.query.service_type;
+  const toDate = req.query.toDate;
+  const createdBy = req.query.created_by;
+  Lead.find({
+    createdAt: {
+      $gte: fromDate,
+      $lt: toDate,
+    },
+    region: {
+      $regex: region,
+      $options: "i",
+    },
+    status: {
+      $regex: status,
+      $options: "i",
+    },
+    service_type: {
+      $regex: service,
+      $options: "i",
+    },
+    created_by: {
+      $regex: createdBy,
+      $options: "i",
+    },
+  }).exec((error, leads) => {
+    if (error) return res.status(400).json({ error });
+    if (leads) {
+      console.log(leads);
+      return res.status(200).json(leads);
+    }
+  });
+};

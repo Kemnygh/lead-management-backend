@@ -64,7 +64,7 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
       lowercase: true,
-      enum: ["user", "admin", "sales"],
+      enum: ["user", "admin", "sales", "superuser"],
       default: "user",
     },
     status: {

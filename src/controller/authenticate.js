@@ -49,7 +49,7 @@ exports.register = (req, res) => {
 };
 
 exports.login = (req, res) => {
-  console.log(res.body);
+  // console.log(res.body);
   User.findOne({ email: req.body.email, status: "active" }).exec(
     (err, user) => {
       if (err || !user) {
@@ -121,3 +121,6 @@ exports.signout = (req, res) => {
     message: "Signout Successfully",
   });
 };
+
+// TODO:
+// add a method to delet users **soft delete**
