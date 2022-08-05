@@ -10,7 +10,7 @@ const {
 
 router.post("/login", loginValidator, isRequestValidated, login);
 
-router.post("/register", registerValidator, isRequestValidated, register);
+router.post("/register", registerValidator, register);
 
 router.post("/logout", signout);
 

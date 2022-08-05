@@ -72,11 +72,6 @@ exports.updateLead = (req, res) => {
           timeZone: "Africa/Nairobi",
         });
 
-        // console.log(
-        //   commentTime.toLocaleString("en-US", {
-        //     timeZone: "Africa/Nairobi",
-        //   })
-        // );
         Lead.updateOne(
           { leadId: req.body.leadId, status: "OPEN" },
           {
