@@ -2,7 +2,7 @@
   "name": "lead-management-backend",
   "version": "1.0.0",
   "description": "This is a backend of lead management solution project",
-  "main": "index.js",
+  "engine": {"node": "v14.18.1"},
   "scripts": {
     "start": "node ./src/server.js",
     "server": "nodemon ./src/server.js",
