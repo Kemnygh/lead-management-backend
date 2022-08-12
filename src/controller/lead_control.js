@@ -117,7 +117,7 @@ exports.updateLead = (req, res) => {
 exports.closeLead = (req, res, next) => {
   // console.log(req.body);
   User.findOne({ _id: req.body._id }).exec((err, user) => {
-    if (user && user.access == "user") {
+    if (user && user.access == "sales") {
       Lead.findOne({ leadId: req.body.leadId }).exec((err, lead) => {
         let timeNow = new Date(Date.now());
         let commentTime = timeNow.toLocaleString("en-US", {
