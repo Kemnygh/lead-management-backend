@@ -46,6 +46,7 @@ exports.lead = (req, res) => {
           });
         } else {
           return res.status(201).json({
+            data,
             message: "lead created Successfully lead ID is:",
           });
         }
@@ -96,9 +97,9 @@ exports.updateLead = (req, res) => {
           (err, res) => {
             if (err) throw err;
             return res;
-            if (res.matchedCount == 0) {
-              //fix how to return message back to html from this point.
-            }
+            // if (res.matchedCount == 0) {
+            //   //fix how to return message back to html from this point.
+            // }
           }
         );
       });
