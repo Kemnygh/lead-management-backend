@@ -1,13 +1,6 @@
 # lead-management-backend
 Backend App using express and mongo DB to create API endpoints. Latest Version dated 05-AUG-2022.
 
-
-#### By GROUP FIVE
-* Kemuel Nalifuma - kemnygh@gmail.com
-* Sharon Apot - sharonapot@gmail.com
-* Kelly Kinyua - kinyuakelly8@gmail.com
-* Bernard Juma - bernard.juma@student.moringaschool.com
-
 ## Description
 This is a backend application build from ground up using node, express and mongoose middleware connecting into a Mongo Database,
 it is meant to provide API for CRUD functions for a Lead Management portal where lead and users can be created and updated.
